@@ -1,5 +1,5 @@
 # raft-message-queue
-Implement a distributed Raft Rest Message Queue according to the Raft paper. All tests passed.
+Implement a distributed Raft Rest Message Queue according to the Raft paper.
 
 # How to test with pytest
 ```bash

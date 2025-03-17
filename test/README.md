@@ -18,4 +18,4 @@
 
 `config.json` will be created in the root folder.
 
-Each test will take care of generating a `config.json` and pass the right parameters to the node process as arguments (config and id). The test framework then will wait for the processes to startup and do elections if needed and will run one test. The test will be sending http requests to the local port given to the node. Based on the answers test will be passed or failed.
+Each test will take care of generating a `config.json` and pass the right parameters to the node process as arguments (config and id). The test framework then will wait for the processes to startup and do elections if needed and will run one test. The test will be sending http requests to the local port given to the node.

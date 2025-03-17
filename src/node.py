@@ -56,7 +56,7 @@ class RaftNode:
         self.commit_index = -1  # Index of the last committed log entry
         self.last_applied = -1  # Last applied log index
 
-        self.shared_count = 0 # number of followers who have replied to each heartbeat
+        self.shared_count = 0 # number of followers who have replied to each heartbeat sent by leader
 
         threading.Thread(target=self.start_election_timer, daemon=True).start()
 
@@ -72,8 +72,6 @@ class RaftNode:
         self.last_heartbeat = time.time()
         votes = 1
         
-        print(f"⚡ Node {self.node_index} is starting an election for term {self.current_term}")
-
         threads = []
 
         def request_vote(peer):
@@ -92,10 +90,9 @@ class RaftNode:
                 if data.get("vote_granted"):
                     with self.lock:
                         votes += 1
-                    print(f"✅ Node {self.node_index} received vote from {peer}")
-            
+                    
             except requests.exceptions.RequestException as e:
-                print(f"❌ Node {self.node_index} failed to contact {peer} for vote.", e)
+                print(f"Node {self.node_index} failed to contact {peer} for vote.", e)
 
         for peer in self.peers:
             t = threading.Thread(target=request_vote, args=(peer,))
@@ -108,7 +105,7 @@ class RaftNode:
         if votes > (len(self.peers)+1) // 2:
             self.become_leader()
         else:
-            print(f"❌ Node {self.node_index} lost the election with {votes} votes.")
+            print(f"Node {self.node_index} lost the election with {votes} votes.")
 
     def become_leader(self):
         self.state = LEADER
@@ -124,7 +121,6 @@ class RaftNode:
     
     def send_heartbeats(self):
         while self.state == LEADER:
-            print(f"❤️ Leader {self.node_index} sending heartbeats...")
             shared_count = 1 # Leader itself
             threads = []
 
@@ -143,12 +139,11 @@ class RaftNode:
                         timeout = 0.1)
                     
                     if response.status_code == 200:
-                        print(f"✅ Heartbeat acknowledged by {peer}")
                         with self.lock:
                             shared_count += 1     
 
                 except requests.exceptions.RequestException:
-                    print(f"❌ Failed to send heartbeat to {peer}")
+                    print(f"Failed to send heartbeat to {peer}")
             
             # Send heartbeat to peers
             for peer in self.peers:
@@ -180,37 +175,23 @@ class RaftNode:
             entry = self.log[self.last_applied]
 
             if entry["operation"] == "create_topic":
-                response = message_queue.create_topic(entry['topic'])
-                if not response:
-                    print("Create topic error in node ", self.address)
-                else:
-                    print("Create topic " + entry['topic'] + "success!")
-
+                message_queue.create_topic(entry['topic'])
+                
             elif entry["operation"] == "add_message":
-                response = message_queue.add_message(entry['topic'], entry['message'])
-                if not response:
-                    print("Add message error in node ", self.address)
-                else:
-                    print("Add message \'" + entry['message'] + "\' to \'" + entry['topic'] + "\' success!")
-
+                message_queue.add_message(entry['topic'], entry['message'])
+                
             elif entry["operation"] == "get_topics":
-                response = message_queue.get_topics()
-                print("Get topics success! Topics are " + response.json()) 
-
+                message_queue.get_topics()
+                
             elif entry["operation"] == "get_message":
-                sucess, message = message_queue.pop_message(entry['topic'])
-                if not sucess:
-                    print("Get message error in node ", self.address)
-                else:
-                    print("Get message \'" + message + "\' from topic \'" + entry['topic'] + "\'.")
-
+                message_queue.pop_message(entry['topic'])
+                
     def get_status(self):
         return {
             "role": self.state,
             "term": self.current_term,
         }
 
-# Flask End Points
 app = Flask(__name__)
 
 # Global MQ for current server
@@ -237,7 +218,6 @@ def create_topic():
     
     # Collect quarum intention
     if raft_node.shared_count > (len(raft_node.peers)+1) // 2:
-    
         # Commit entry
         raft_node.commit_index += 1
     
@@ -248,6 +228,7 @@ def create_topic():
             return jsonify({"success": True}), 200
         else:
             return jsonify({"success": False}), 400
+        
     else:
         return jsonify({"success": False}), 400
 
@@ -256,7 +237,10 @@ def get_topics():
     # Check leader, only leader communicates with client request
     if raft_node.state != LEADER:
         return jsonify({"success": False}), 400
-    return jsonify({"success": True, "topics": message_queue.get_topics()}), 200
+    return jsonify({
+        "success": True,
+        "topics": message_queue.get_topics()
+        }), 200
     
 @app.route('/message', methods=['PUT'])
 def add_message():
@@ -280,6 +264,7 @@ def add_message():
     
     # Check quarum status
     if raft_node.shared_count > (len(raft_node.peers)+1) // 2:
+        # Commit entry
         raft_node.commit_index += 1
         # Leader directly apply entry
         success = message_queue.add_message(data['topic'], data['message'])
@@ -288,6 +273,7 @@ def add_message():
             return jsonify({"success": True}), 200
         else:
             return jsonify({"success": False}), 400
+        
     else:
         return jsonify({"success": False}), 400
     
@@ -317,6 +303,7 @@ def get_message(topic):
             return jsonify({"success": True, "message": message}), 200
         else:
             return jsonify({"success": False}), 400
+        
     else:
         return jsonify({"success": False}), 400
 
@@ -338,11 +325,9 @@ def request_vote():
         raft_node.current_term = term
         raft_node.state = FOLLOWER
         raft_node.voted_for = candidate_id
-        print(f"✅ Node {raft_node.node_index} voted for {candidate_id} in term {term}")
         return jsonify({"vote_granted": True}), 200
 
     else:
-        print(f"❌ Node {raft_node.node_index} rejected vote request from {candidate_id} in term {term}")
         return jsonify({"vote_granted": False}), 400
 
 @app.route('/append_entries', methods=['POST'])
@@ -353,7 +338,10 @@ def append_entries():
     leader_address = data.get("leader_address")
     log = data.get("log", [])
     commit_index = data.get("commit_index", -1)
+
+    # Receive heartbeat
     raft_node.receive_heartbeat(leader_term, leader_address, log, commit_index)
+
     return jsonify({"success": True}), 200
 
 if __name__ == "__main__":
