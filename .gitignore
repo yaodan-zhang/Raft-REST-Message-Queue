@@ -3,3 +3,5 @@ myvenv/
 */.DS_Store
 
 test/__pycache__
+
+config.json
