@@ -1,0 +1,5 @@
+./myvenv/
+
+*/.DS_Store
+
+test/__pycache__
