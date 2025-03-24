@@ -1,5 +1,5 @@
-# raft-message-queue
-Implement a distributed Raft Rest Message Queue according to the [Raft paper](https://www.usenix.org/conference/atc14/technical-sessions/presentation/ongaro).
+# Raft-REST-Message-Queue
+Implement a distributed Raft REST Message Queue according to the [Raft paper](https://www.usenix.org/conference/atc14/technical-sessions/presentation/ongaro).
 
 # How to test with pytest
 ```bash
