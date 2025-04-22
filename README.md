@@ -64,10 +64,12 @@ python3 src/node.py config.json 2
 src/
   node.py
 test/
-  submission_test.py
-technical_report.md
-testing_report.md
-requirements.txt
+  election_test.py
+  message_queue_test.py
+  replication_test.py
+  test_utils.py
+  README.md
+./requirements.txt
 ```
 
 ## Limitations
