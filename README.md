@@ -1,20 +1,39 @@
-# Raft-REST-Message-Queue
-Implement a distributed Raft REST Message Queue according to the [Raft paper](https://www.usenix.org/conference/atc14/technical-sessions/presentation/ongaro).
+## 📄 **`Raft-REST-Message-Queue` — Distributed Message Queue with Raft**
 
-# How to test with pytest
-```bash
-> pip3 install pytest
-> pytest
-```
+```markdown
+# Raft REST Message Queue
+*A lightweight distributed message queue using the Raft consensus algorithm and RESTful APIs*
 
-run a specific file
-```bash
-> pytest message_queue_test.py
-```
+## Overview
+This project implements a fault-tolerant **distributed message queue** leveraging the **Raft consensus protocol** to ensure strong consistency across nodes. Designed for educational purposes, it mimics core functionalities of systems like Kafka but with a focus on clarity and reliability.
 
-run a specific test
+It exposes a simple RESTful interface for publishing and subscribing to topics.
+
+## Key Features
+- ⚖️ **Raft-Based Consensus**: Ensures leader election and log replication.
+- 🌐 **RESTful API**: Easy-to-use endpoints for producers and consumers.
+- 💾 **Persistent Queues**: Message durability across simulated node failures.
+- 🔄 **Fault Tolerance**: Handles leader failover gracefully.
+
+## Technologies Used
+- **Python 3**
+- Flask (for REST API)
+- Custom Raft Implementation
+- JSON for message serialization
+
+## API Endpoints
+- `POST /publish/<topic>` — Publish a message to a topic
+- `GET /subscribe/<topic>` — Retrieve messages from a topic
+
+## Getting Started
+### Prerequisites
+- Python 3.8+
+- Flask
+
+### Run the Server
 ```bash
-> pytest message_queue_test.py::test_create_topic
-```
+pip install flask
+python raftmq_server.py
+
 
 
