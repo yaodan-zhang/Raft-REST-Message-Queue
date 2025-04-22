@@ -19,3 +19,19 @@
 `config.json` will be created in the root folder.
 
 Each test will take care of generating a `config.json` and pass the right parameters to the node process as arguments (config and id). The test framework then will wait for the processes to startup and do elections if needed and will run one test. The test will be sending http requests to the local port given to the node.
+
+## How to test with pytest
+```bash
+> pip3 install pytest
+> pytest
+```
+
+run a specific file
+```bash
+> pytest message_queue_test.py
+```
+
+run a specific test
+```bash
+> pytest message_queue_test.py::test_create_topic
+```
