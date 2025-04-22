@@ -48,7 +48,7 @@ Define cluster nodes in `config.json`:
 ```
 
 Launch Nodes:
-```json
+```
 python3 src/node.py config.json 0
 python3 src/node.py config.json 1
 python3 src/node.py config.json 2
@@ -60,7 +60,7 @@ Supports automated leader failure and recovery scenarios.
 Integration-tested with provided framework to ensure compliance with Raft behavior.
 
 ## Project Structure
-```json
+```
 src/
   node.py
   ...other modules...
