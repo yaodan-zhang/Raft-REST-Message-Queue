@@ -1,6 +1,5 @@
 ## 📄 **`Raft-REST-Message-Queue` — Distributed Message Queue with Raft**
 
-```markdown
 # Raft REST Message Queue
 *A lightweight distributed message queue using the Raft consensus algorithm and RESTful APIs*
 
@@ -34,6 +33,6 @@ It exposes a simple RESTful interface for publishing and subscribing to topics.
 ```bash
 pip install flask
 python raftmq_server.py
-
+```
 
 
