@@ -55,15 +55,14 @@ python3 src/node.py config.json 2
 ```
 
 ### Testing
-Custom test suite provided in /test directory.  
-Supports automated leader failure and recovery scenarios.  
-Integration-tested with provided framework to ensure compliance with Raft behavior.
+- Custom test suite provided in /test directory.  
+- Supports automated leader failure and recovery scenarios.  
+- Integration-tested with provided framework to ensure compliance with Raft behavior.
 
 ## Project Structure
 ```
 src/
   node.py
-  ...other modules...
 test/
   submission_test.py
 technical_report.md
@@ -72,8 +71,8 @@ requirements.txt
 ```
 
 ## Limitations
-Network partition handling limited to leader election.  
-Message delivery not guaranteed during active partition events.
+- Network partition handling limited to leader election.  
+- Message delivery not guaranteed during active partition events.
 
 ## License
 For educational purposes only.
