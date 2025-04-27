@@ -77,4 +77,6 @@ test/
 - Message delivery not guaranteed during active partition events.
 
 ## License
-For educational purposes only.
+This software is provided for academic research purposes only. 
+Commercial use is prohibited without prior written permission.
+
