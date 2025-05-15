@@ -7,11 +7,11 @@ RRMQ is a distributed message queue system designed to ensure **consistency**, *
 This project was developed to explore core distributed systems principles such as leader election, log replication, and state consistency in the presence of node failures.
 
 ## Key Features
-- ⚖️ **Raft-Based Leader Election**: Ensures reliable coordination among nodes with automatic failover.
-- 🔄 **Log Replication**: Guarantees consistent message state across nodes before committing operations.
-- 🌐 **RESTful API Interface**: Provides endpoints for topic management, message publishing, consumption, and system status.
-- 🛡️ **Fault Tolerance**: Survives failures of up to ⌊ N/2 - 1 ⌋ nodes without service disruption.
-- 📥 **FIFO Message Queue**: Ensures ordered delivery and single consumption semantics per message.
+- **Raft-Based Leader Election**: Ensures reliable coordination among nodes with automatic failover.
+- **Log Replication**: Guarantees consistent message state across nodes before committing operations.
+- **RESTful API Interface**: Provides endpoints for topic management, message publishing, consumption, and system status.
+- **Fault Tolerance**: Survives failures of up to ⌊ N/2 - 1 ⌋ nodes without service disruption.
+- **FIFO Message Queue**: Ensures ordered delivery and single consumption semantics per message.
 
 ## System Architecture
 - Built using **Python 3** with **Flask** for RESTful endpoints.
@@ -80,3 +80,6 @@ test/
 This software is provided for academic research purposes only. 
 Commercial use is prohibited without prior written permission.
 
+## Raft Consensus Demonstrations
+https://raft.github.io/
+https://thesecretlivesofdata.com/raft/
