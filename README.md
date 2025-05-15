@@ -83,6 +83,6 @@ Commercial use is prohibited without prior written permission.
 ## Raft Consensus Demonstrations
 The original [Raft](./raft.pdf) paper
 
-https://raft.github.io/
+Webpage: https://raft.github.io/
 
-https://thesecretlivesofdata.com/raft/
+Live demo: https://thesecretlivesofdata.com/raft/
